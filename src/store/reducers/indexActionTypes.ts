@@ -1,0 +1,1 @@
+export const PAGE_UPDATE_INDEX = 'PAGE_UPDATE_INDEX';

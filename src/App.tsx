@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {lazy, Suspense} from 'react';
 import './App.css';
+import LoadingScreen from "./components/LoadingScreen";
+import {Route, Switch, BrowserRouter} from 'react-router-dom';
+import routes from "./constants/routes";
+import PageNotFound from "./pages/PageNotFound";
+import TopNavigation from "./components/Header/TopNavigation";
+
+const Home = lazy(() =>
+    import('./pages/Home/Home' /* webpackChunkName: "Home" */)
+);
+const Contacts = lazy(() =>
+    import('./pages/Contacts/Contacts' /* webpackChunkName: "Contacts" */)
+);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Suspense fallback={<LoadingScreen/>}>
+            <BrowserRouter>
+                <TopNavigation/>
+                <Switch>
+                    <Route exact path={routes.home} component={Home}/>
+                    <Route exact path={routes.contacts} component={Contacts}/>
+                    <Route path="*" component={PageNotFound}/>
+                </Switch>
+            </BrowserRouter>
+        </Suspense>
+    );
 }
 
 export default App;
